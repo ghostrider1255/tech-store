@@ -1,5 +1,7 @@
 import React,{Component} from 'react';
 import {linkData} from './LinkData';
+import {socialData} from './socialData';
+import {items} from './productData';
 
 const ProductContext = React.createContext();
 
@@ -8,10 +10,27 @@ class ProductProvider extends Component{
     state={
         sideBarOpen: false,
         cartOpen: false,
-        cartItems: 99,
+        cartItems: 12,
         links: linkData,
-        cart: []
+        socialLinks: socialData,
+        cart: [],
+        cartSubtotal: 0,
+        cartTax: 0,
+        cartTotal: 0,
+        storeProducts: [],
+        filteredProducts: [],
+        featuredProducts: [],
+        SingleProduct:{},
+        loading: true
+    }
 
+    componentDidMount(){
+        this.setP
+    }
+
+    //set products
+    setProducts = (products) =>{
+        
     }
 
     //handle side bar toggle
