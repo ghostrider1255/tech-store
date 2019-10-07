@@ -21,18 +21,69 @@ class ProductProvider extends Component{
         filteredProducts: [],
         featuredProducts: [],
         SingleProduct:{},
-        loading: true
+        loading: false
     }
 
     componentDidMount(){
-        this.setP
+        this.setProducts(items);
     }
 
     //set products
     setProducts = (products) =>{
-        
+        let storeProducts = products.map(item=>{
+            const {id} = item.sys;
+            const image = item.fields.image.fields.file.url;
+            const product = {id,...item.fields,image};
+            return product
+        })
+        //featured products
+        let featuredProducts = storeProducts.filter(item => item.featured === true);
+
+        this.setState({
+            storeProducts,
+            filteredProducts:storeProducts,
+            featuredProducts,
+            cart: this.getStorageCart(),
+            SingleProduct: this.getStorageProduct(),
+            loading: false
+
+        })
     }
 
+    //get product from local storage
+    getStorageProduct = () =>{
+        return {}
+    }
+
+    //get cart from local storage
+    getStorageCart=() =>{
+        return [];
+    }
+
+    //get total
+    getTotal = () =>{
+
+    };
+
+    //add total
+    addTotal = () =>{
+
+    }
+
+    //sync totals
+    syncStorage = () =>{
+
+    }
+
+    //add to cart 
+    addToCart = (id) => {
+        console.log(`add to cart ${id}`);
+    }
+
+    //set single product
+    setSingleProduct = (id) =>{
+        console.log(`set single product ${id}` );
+    }
     //handle side bar toggle
     handleSideBar= () =>{
         this.setState({
@@ -61,7 +112,10 @@ class ProductProvider extends Component{
             handleSideBar:this.handleSideBar,
             handleCart:this.handleCart,
             closeCart: this.closeCart,
-            openCart: this.openCart}}>
+            openCart: this.openCart,
+            addToCart: this.addToCart,
+            setSingleProduct: this.setSingleProduct
+            }}>
             {
                 this.props.children
             }
