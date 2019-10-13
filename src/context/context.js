@@ -21,7 +21,13 @@ class ProductProvider extends Component{
         filteredProducts: [],
         featuredProducts: [],
         SingleProduct:{},
-        loading: false
+        loading: false,
+        search: '',
+        price: 0,
+        min: 0,
+        max: 0,
+        company: "all",
+        shipping: false
     }
 
     componentDidMount(){
@@ -38,6 +44,8 @@ class ProductProvider extends Component{
         })
         //featured products
         let featuredProducts = storeProducts.filter(item => item.featured === true);
+        // get max price
+        let maxPrice = Math.max(...storeProducts.map(item=> item.price))
 
         this.setState({
             storeProducts,
@@ -45,7 +53,9 @@ class ProductProvider extends Component{
             featuredProducts,
             cart: this.getStorageCart(),
             SingleProduct: this.getStorageProduct(),
-            loading: false
+            loading: false,
+            price: maxPrice,
+            max: maxPrice
 
         },() => {this.addTotal()})
     }
@@ -162,6 +172,73 @@ class ProductProvider extends Component{
         this.setState({cartOpen:true})
     }
 
+//cart functionality
+increment = (id) => {
+    let tempCart  = [...this.state.cart];
+    const cartItem = tempCart.find( item => item.id === id);
+    cartItem.count ++;
+    cartItem.total = cartItem.count * cartItem.price;
+    cartItem.total = parseFloat(cartItem.total.toFixed(2));
+    this.setState(() => {
+        return{
+            cart:[...tempCart]
+        }
+    }, () => {
+        this.addTotal();
+        this.syncStorage()
+    })
+}
+
+decrement= (id) => {
+    let tempCart  = [...this.state.cart];
+    const cartItem = tempCart.find( item => item.id === id);
+    cartItem.count --;
+    if(cartItem.count ===0){
+        this.removeItem(cartItem.id)
+    }
+    else{
+        cartItem.total = cartItem.count * cartItem.price;
+        cartItem.total = parseFloat(cartItem.total.toFixed(2));
+        this.setState(() => {
+            return{
+                cart:[...tempCart]
+            }
+        }, () => {
+            this.addTotal();
+            this.syncStorage()
+        })
+    }    
+}
+
+removeItem = (id) =>
+{
+    let tempCart = [...this.state.cart];
+    tempCart = tempCart.filter( item => item.id!==id);
+    this.setState ({
+        cart: [...tempCart]
+    }, () => {
+        this.addTotal();
+        this.syncStorage()
+    })
+}
+
+clearCart = ()=>{
+    this.setState({
+        cart:  []
+    }, () => {
+        this.addTotal();
+        this.syncStorage()
+    })
+}
+
+// handle filtering
+handleChange = (event) => {
+
+}
+
+sortData = () =>{
+
+}
     render(){
             return (
             <ProductContext.Provider value={{...this.state,
@@ -170,7 +247,12 @@ class ProductProvider extends Component{
             closeCart: this.closeCart,
             openCart: this.openCart,
             addToCart: this.addToCart,
-            setSingleProduct: this.setSingleProduct
+            setSingleProduct: this.setSingleProduct,
+            increment: this.increment,
+            decrement: this.decrement,
+            removeItem: this.removeItem,
+            clearCart: this.clearCart,
+            handleChange: this.handleChange
             }}>
             {
                 this.props.children

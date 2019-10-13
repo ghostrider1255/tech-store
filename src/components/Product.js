@@ -21,7 +21,7 @@ export default function Product({product}) {
                     </div>
                     <div className="card-body d-flex justify-content-between">
                         <p className="mb-0">{product.title}</p>
-                        <p className="mb-0 text-main">${product.price}</p>
+                        <p className="mb-0 text-main">&#8377; {product.price}</p>
                     </div>
                 </div>
             </ProductWrapper>

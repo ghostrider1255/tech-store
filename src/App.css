@@ -48,3 +48,7 @@ body{
   color: var(--primaryColor);
   outline-color: var(--darkGrey);
 }
+
+.cart-icon:hover{
+  cursor: pointer;
+}
